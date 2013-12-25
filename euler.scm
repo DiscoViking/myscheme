@@ -407,3 +407,14 @@
   )
 )
     
+;;---------------------------------
+;; Euler Problem 31
+;;---------------------------------
+(define (sum-from n l)
+  (cond
+    ((equal? l '()) 0)
+    ((< n 0) 0)
+    ((= n 0) 1)
+    (else (+ (sum-from n (cdr l)) (sum-from (- n (car l)) l)))
+  )
+)

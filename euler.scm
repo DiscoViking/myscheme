@@ -418,3 +418,29 @@
     (else (+ (sum-from n (cdr l)) (sum-from (- n (car l)) l)))
   )
 )
+
+;;---------------------------------
+;; Euler Problem 46
+;;---------------------------------
+(define (goldbach-check p n)
+  (if (equal? p '())
+    #f
+    (if (integer? (sqrt (/ (- n (car p)) 2)))
+      #t
+      (goldbach-check (cdr p) n)
+    )
+  )
+)
+
+(define (euler46)
+  (letrec ((f (lambda (p n)
+    (if (divisible-by-any? n p)
+      (if (goldbach-check n)
+        (f p (+ n 2))
+        n
+      )
+      (f (cons n p) (+ n 2))
+    ))))
+    (f '(2) 3)
+  )
+)

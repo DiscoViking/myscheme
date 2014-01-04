@@ -434,7 +434,7 @@
 (define (euler46)
   (letrec ((f (lambda (p n)
     (if (divisible-by-any? n p)
-      (if (goldbach-check n p)
+      (if (goldbach-check p n)
         (f p (+ n 2))
         n
       )

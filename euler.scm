@@ -54,26 +54,16 @@
 ;; Euler Problem #7                                                           ;;
 ;;----------------------------------------------------------------------------;;
 (define (divisible-by-any? x P)
+  (let ((s (sqrt x)))
     (if (equal? P '())
-        #f
-        (if (divisible-by? x (car P))
-            #t
-            (divisible-by-any? x (cdr P))
-        )
+      #f
+      (cond 
+        ((> (car P) s) #f)
+        ((divisible-by? x (car P)) #t)
+        (else  (divisible-by-any? x (cdr P)))
+      )
     )
-)
-(define (nth-prime-rec n x P)
-    (if (= 0 n)
-        (- x 1)
-        (if (divisible-by-any? x P)
-            (nth-prime-rec n (+ x 1) P)
-            (nth-prime-rec (- n 1) (+ x 1) (cons x P))
-        )
-    )
-)
-
-(define (nth-prime n)
-    (nth-prime-rec n 2 '())
+  )
 )
 
 ;;----------------------------------------------------------------------------;;
@@ -124,6 +114,19 @@
         (euler9-rec a (+ b 1))
       )
     )
+  )
+)
+
+;;----------------------------------------------------------------------------;;
+;; Euler Problem #10                                                          ;;
+;;----------------------------------------------------------------------------;;
+(define (sum-primes-under n)
+  (letrec ((f (lambda (i t)
+    (if (>= i n)
+      t
+      (f (+ i 2) (if (prime? i) (+ t i) t))
+    ))))
+    (f 3 2)
   )
 )
 

@@ -117,26 +117,21 @@
     )
 )
 
-(define primes-rec
-    (lambda (l n M)
-        (if (>= n (/ M 2))
-            l
-            (if (in? n l)
-                (primes-rec 
-                    (sieve l n)
-                    (+ n 1)
-                    M
-                )
-                (primes-rec l (+ n 1) M)
+(define (primes-rec l u M)
+    (let ((s (sqrt M)))
+        (if (>= (car l) s)
+            (cat (reverse u) l)
+            (primes-rec 
+                (cdr (sieve l (car l)))
+                (cons (car l) u)
+                M
             )
         )
     )
 )
 
 (define (primes n)
-    (filter (lambda (x) (not (= x 1)))
-        (primes-rec (make-list n) 2 n)
-    )
+    (primes-rec (cdr (reverse (make-list n))) '() n)
 )
 
 (define prime-factors-rec
@@ -156,9 +151,25 @@
 )
 
 (define (prime? n)
-  (if (< n 0)
-    #f
-    (equal? (prime-factors n) (list n))
+  (let ((s (sqrt n)))
+    (letrec ((f (lambda (i)
+      (cond
+        ((> i s) #t)
+        ((divisible-by? n i) #f)
+        (else (f (+ i 1)))
+      ))))
+      (if (even? n) #f (f 3))
+    )
+  )
+)
+
+(define (nth-prime n)
+  (letrec ((f (lambda (i x)
+    (if (= i n)
+      (- x 2)
+      (f (if (prime? x) (+ i 1) i) (+ x 2))
+    ))))
+    (if (= n 1) 2 (f 1 3))
   )
 )
 
